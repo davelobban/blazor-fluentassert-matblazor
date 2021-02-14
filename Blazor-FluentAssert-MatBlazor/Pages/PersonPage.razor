@@ -1,0 +1,35 @@
+﻿@page "/person"
+@using Blazor_FluentAssert_MatBlazor.Validation
+@inject IMatDialogService MatDialogService
+
+<MatButton class="tank-operational-level-edit-btn" OnClick="@(_=>OpenDialogFromService())">Add</MatButton>
+
+<p>@DisplayInfo</p>
+
+@code {
+    string DisplayInfo = "";
+
+    async Task OpenDialogFromService()
+    {
+        var result = await MatDialogService.OpenAsync(typeof(PersonDialog), new MatDialogOptions()
+        {
+            Attributes = new Dictionary<string, object>(), SurfaceStyle = "min-width: 600px; max-width: 700px;"
+        });
+        //result is the retval from CloseDialog(). It can be null if the user clicks MatButton (edit) twice.
+        if (result != null)
+        {
+            var personDialogResult = (PersonDialog.DialogClosedEventArgs<Person>) result;
+            if (personDialogResult.Cancelled)
+            {
+                DisplayInfo = "Edit cancelled";
+            }
+            else
+            {
+                var person = personDialogResult.Data;
+                DisplayInfo = $"Valid Person created ... N: {person.Name}; A: {person.Age}; E: {person.EmailAddress}";
+            }
+
+        }
+    }
+
+}

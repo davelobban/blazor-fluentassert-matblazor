@@ -1,0 +1,95 @@
+﻿@using Blazor_FluentAssert_MatBlazor.Validation
+@inject IMatDialogService MatDialogService
+
+<div class="person-dialog">
+    <MatDialogTitle style="display: flex; align-items: center;">
+        @*<div style="flex: 1;">@Caption</div>*@
+        <div @onclick="@(_=>CancelDialog())" style="cursor: pointer;">
+            <MatIcon Icon="@MatIconNames.Close"></MatIcon>
+        </div>
+    </MatDialogTitle>
+    <MatDialogContent>
+
+        @*This has been lifted from the Index page. The only change is in the removal of the OnClick in the Save button*@
+        <EditForm OnValidSubmit="SubmitValidForm" EditContext="editContext">
+            <FluentValidationValidator />
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <MatTextField @bind-Value="CurrentItem.Name" Outlined="true" Class="form-control" Id="name"></MatTextField>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <MatNumericUpDownField Label="Age"
+                                       @bind-Value="CurrentItem.Age" Class="form-control" Id="age">
+                </MatNumericUpDownField>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address (2):</label>
+                <MatTextField @bind-Value="CurrentItem.EmailAddress" Label="sample@yourdomain.com" Outlined="true" Class="form-control" Id="email"></MatTextField>
+            </div>
+
+            <MatDialogActions>
+                @if (editContext.IsModified())
+                {
+                @*This calls SaveDialog which bypasses the validation so omit the OnClick and delegate to the EditForm:
+                    <MatButton OnClick="@SaveDialog" Type="Submit">Save</MatButton>*@
+                    <MatButton Type="Submit">Save</MatButton>
+                }
+                <MatButton OnClick="@CancelDialog">Cancel</MatButton>
+            </MatDialogActions>
+
+        </EditForm>
+        }
+    </MatDialogContent>
+
+</div>
+
+@code
+{
+    Person CurrentItem;
+    EditContext editContext;
+
+    [CascadingParameter]
+    public MatDialogReference DialogReference { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        CurrentItem = new Person();
+        editContext = new EditContext(CurrentItem);
+    }
+#pragma warning disable 1998
+    async Task SaveDialog()
+    {
+        DialogReference.Close(new DialogClosedEventArgs<Person>
+        {
+            Cancelled = false,
+            Data = CurrentItem
+        });
+    }
+    async Task CancelDialog()
+#pragma warning restore 1998
+    {
+        DialogReference.Close(new DialogClosedEventArgs<Person>
+        {
+            Cancelled = true,
+            Data = CurrentItem
+        });
+    }
+
+    public class DialogClosedEventArgs<T>
+    {
+        public bool Cancelled { get; set; }
+        public T Data { get; set; }
+    }
+
+    async Task SubmitValidForm()
+    {
+        await SaveDialog();
+    }
+}
+

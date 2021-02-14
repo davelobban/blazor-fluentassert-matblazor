@@ -13,14 +13,11 @@ Welcome to your new app.
 
     <div class="form-group">
         <label for="name">Name:</label>
-        @*<InputText @bind-Value="Person.Name" class="form-control" id="name" />*@
         <MatTextField @bind-Value="Person.Name" Outlined="true" Class="form-control" Id="name"></MatTextField>
     </div>
 
     <div class="form-group">
         <label for="age">Age:</label>
-        @*<InputNumber @bind-Value="Person.Age" class="form-control" id="age" />*@
-        
         <MatNumericUpDownField Label="Age"
                                @bind-Value="Person.Age" Class="form-control" Id="age">
         </MatNumericUpDownField>
@@ -28,12 +25,8 @@ Welcome to your new app.
 
     <div class="form-group">
         <label for="email">Email Address (2):</label>
-        @*<InputText @bind-Value="Person.EmailAddress" class="form-control" id="email" />*@
         <MatTextField @bind-Value="Person.EmailAddress" Label="sample@yourdomain.com" Outlined="true" Class="form-control"  Id="email"></MatTextField>
     </div>
-
-
-    
 
     <button type="submit" class="btn btn-primary">Save</button>
 
