@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MatBlazor;
 
 namespace Blazor_FluentAssert_MatBlazor
 {
@@ -29,6 +30,7 @@ namespace Blazor_FluentAssert_MatBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddMatBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
